@@ -1,0 +1,67 @@
+<?php
+/**
+ * @file
+ * Code for the DFS_WEM feature.
+ */
+
+include_once 'dfs_wem.features.inc';
+
+/**
+ * Implements hook_migrate_api().
+ */
+function dfs_wem_migrate_api() {
+  $api = array(
+    'api' => 2,
+    'migrations' => array(
+      'DFSWEMGroupsWEMContestUsers' => array('class_name' => 'DFSWEMGroupsWEMContestUsers'),
+      'DFSWEMContestNodes' => array('class_name' => 'DFSWEMContestNodes'),
+      'DFSWEMContestNodesTranslations' => array('class_name' => 'DFSWEMContestNodesTranslations'),
+      'DFSWEMCommerceNodes' => array('class_name' => 'DFSWEMCommerceNodes'),
+      'DFSWEMCommerceNodesTranslations' => array('class_name' => 'DFSWEMCommerceNodesTranslations'),
+      'DFSWEMInterestsTerms' => array('class_name' => 'DFSWEMInterestsTerms'),
+      'DFSWEMNewsNodes' => array('class_name' => 'DFSWEMNewsNodes'),
+      'DFSWEMNewsNodesTranslations' => array('class_name' => 'DFSWEMNewsNodesTranslations'),
+      'DFSWEMNewsVideo' => array('class_name' => 'DFSWEMNewsVideo'),
+      'DFSWEMProducts' => array('class_name' => 'DFSWEMProducts'),
+      'DFSWEMProductReviewNodes' => array('class_name' => 'DFSWEMProductReviewNodes'),
+      'DFSWEMTweetNodes' => array('class_name' => 'DFSWEMTweetNodes'),
+      'DFSWEMUserPictures' => array('class_name' => 'DFSWEMUserPictures'),
+      'DFSWEMUsers' => array('class_name' => 'DFSWEMUsers'),
+    ),
+  );
+  return $api;
+}
+
+/**
+ * Implements hook_df_import_alter().
+ */
+function dfs_wem_df_import_alter(&$migrations) {
+  return $migrations['dfs_wem'] = array(
+    'DFSWEMInterestsTerms',
+    'DFSWEMUserPictures',
+    'DFSWEMUsers',
+    'DFSWEMProducts',
+    'DFSWEMCommerceNodes',
+    'DFSWEMCommerceNodesTranslations',
+    'DFSWEMProductReviewNodes',
+    'DFSWEMContestNodes',
+    'DFSWEMContestNodesTranslations',
+    'DFSWEMGroupsWEMContestUsers',
+    'DFSWEMNewsVideo',
+    'DFSWEMNewsNodes',
+    'DFSWEMNewsNodesTranslations',
+    'DFSWEMTweetNodes',
+  );
+}
+
+/**
+ *  Implements hook_post_features_enable_feature().
+ */
+function dfs_wem_post_features_enable_feature($component) {
+  // Log components as they are enabled.
+  watchdog('component', 'dfs_wem enabled ' . $component . ' component');
+  if ($component == 'features_api') {
+    migrate_get_module_apis();
+  }
+}
+
